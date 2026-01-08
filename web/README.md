@@ -86,6 +86,3 @@ PORT=9112  # Default Application Port
 ## 👨‍💻 Engineer
 
 **Falatehan Anshor**  
-*Offensive Security Specialist*
-
-Empowering Pentest Teams with next-generation tooling.

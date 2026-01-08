@@ -80,6 +80,3 @@ The CLI is designed for pipe-friendly operations. Future updates will incorporat
 ## Engineer
 
 **Falatehan Anshor**  
-*Offensive Security Specialist*
-
-*Terminal power meets security intelligence.*

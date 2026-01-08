@@ -114,7 +114,7 @@ CVSSCalr/
 ## 👨‍💻 Author Profile
 
 **Falatehan Anshor**  
-*Offensive Security Specialist | Security Tool Developer*
+*Security Tool Developer*
 
 Dedicated to building high-impact tools that empower the cybersecurity community. Open to collaboration on advanced security augmentation projects.
 
