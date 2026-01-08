@@ -22,7 +22,7 @@ This tool streamlines the vulnerability lifecycle by integrating **Heuristic Ana
 
 ### 🌐 The Advanced Web Portal
 *Experience a modern, glass-morphism interface optimized for rapid triage.*
-![Main Web UI](imgs/preview-web-ui.png)
+![Main Web UI](imgs/preview-web.png)
 
 ### 💻 The High-Speed CLI Core
 *Zero-latency terminal performance for offensive security automation.*
