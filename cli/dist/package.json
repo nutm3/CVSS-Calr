@@ -1,0 +1,10 @@
+{
+    "name": "cvsscalr-cli",
+    "version": "1.0.0",
+    "description": "Interactive CLI for CVSS 3.1 Scoring and Heuristic Analysis",
+    "main": "app.js",
+    "dependencies": {},
+    "scripts": {
+        "start": "node app.js"
+    }
+}

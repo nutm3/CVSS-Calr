@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVSSCalr v1.0 - Severity Calculator</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-main);
+            border-color: var(--text-main);
+        }
+
+        .nav-btn.active {
+            background: var(--primary-accent);
+            color: #000;
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+
+        .radio-option:hover .option-icon {
+            filter: drop-shadow(0 0 5px currentColor);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="header">
+            <div class="brand-title">CVSSCalr <span style="font-size:0.5em; opacity:0.7;">v1.0</span></div>
+            <div class="brand-desc" style="display:flex; flex-direction:column; align-items:center; gap:5px;">
+                <span style="font-size:1.1rem; color:#ccc; letter-spacing:1px;">Advanced Severity Score
+                    Calculator</span>
+                <span style="font-size:0.9rem; color:var(--text-muted); margin-top:5px;">
+                    Created by <span style="color:var(--primary-accent); font-weight:600;">Falatehan Anshor</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="score-bar">
+            <div class="score-display" style="gap: 20px;">
+                <div id="score-circle" class="score-circle">0.0</div>
+                <div style="display:flex; flex-direction:column;">
+                    <span style="font-size:0.8rem; color:var(--text-muted); letter-spacing:1px;">SEVERITY</span>
+                    <span id="severity-text" style="font-size:1.4rem; font-weight:700; color:#fff;">NONE</span>
+                </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:8px; flex-grow:1; max-width:60%;">
+                <div id="vector-string" class="vector-string" style="font-size: 0.9rem;">
+                    CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N</div>
+                <div style="display:flex; gap:10px;">
+                    <button id="btn-copy" class="btn-copy">
+                        <i class="fa-regular fa-copy"></i> Copy Vector
+                    </button>
+                    <button id="btn-report" class="btn-copy"
+                        style="background: rgba(0, 240, 255, 0.1); border-color: var(--primary-accent); color: var(--primary-accent);">
+                        <i class="fa-solid fa-file-export"></i> Preview Report
+                    </button>
+                    <span class="copy-feedback"
+                        style="display:none; color:var(--primary-accent); font-size:0.8rem;">Copied!</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="report-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content glass-card"
+                style="max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+                <div class="modal-header">
+                    <h2 style="color: var(--primary-accent); margin:0;"><i class="fa-solid fa-file-lines"></i> Report
+                        Preview</h2>
+                    <button id="close-modal"
+                        style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">&times;</button>
+                </div>
+                <div id="report-preview-body"
+                    style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 10px; margin: 20px 0; font-family: 'Courier New', monospace; font-size: 0.9rem; color: #fff; white-space: pre-wrap; line-height: 1.5;">
+                </div>
+                <div
+                    style="display:flex; justify-content: space-between; align-items: center; gap: 15px; margin-top: 20px;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <label for="report-format" style="font-size:0.8rem; color:var(--text-muted);">Format:</label>
+                        <select id="report-format" class="form-control"
+                            style="width:auto; padding: 5px 10px; height:auto; background: #282a36; border: 1px solid rgba(0, 240, 255, 0.4); color: #fff; border-radius: 5px;">
+                            <option value="md" style="background: #282a36; color: #fff;">Markdown (.md)</option>
+                            <option value="html" style="background: #282a36; color: #fff;">HTML (Professional)</option>
+                            <option value="csv" style="background: #282a36; color: #fff;">CSV (.csv)</option>
+                            <option value="json" style="background: #282a36; color: #fff;">JSON (.json)</option>
+                            <option value="yaml" style="background: #282a36; color: #fff;">YAML (.yaml)</option>
+                            <option value="txt" style="background: #282a36; color: #fff;">Plain Text (.txt)</option>
+                        </select>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button id="btn-print-report" class="btn-copy"
+                            style="background:#8be9fd; color:#282a36; border:none; padding: 10px 20px;">
+                            <i class="fa-solid fa-print"></i> Print (PDF)
+                        </button>
+                        <button id="btn-download-report" class="nav-btn active">
+                            <i class="fa-solid fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(5px);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-bottom: 15px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+        </style>
+
+        <div id="manual-grid" class="calculator-grid">
+            <div class="metric-box">
+                <div class="metric-title">Attack Vector (AV)</div>
+                <div class="metric-options">
+                    <label class="radio-option"><input type="radio" name="AV" value="N" checked><span
+                            class="radio-check"></span><span class="option-label">Network <i
+                                class="fa-solid fa-globe option-icon" style="color:#00f0ff;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="AV" value="A"><span
+                            class="radio-check"></span><span class="option-label">Adjacent <i
+                                class="fa-solid fa-wifi option-icon" style="color:#bd93f9;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="AV" value="L"><span
+                            class="radio-check"></span><span class="option-label">Local <i
+                                class="fa-solid fa-desktop option-icon" style="color:#ffb86c;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="AV" value="P"><span
+                            class="radio-check"></span><span class="option-label">Physical <i
+                                class="fa-solid fa-user-secret option-icon" style="color:#ff5555;"></i></span></label>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-title">Attack Complexity (AC)</div>
+                <div class="metric-options">
+                    <label class="radio-option"><input type="radio" name="AC" value="L" checked><span
+                            class="radio-check"></span><span class="option-label">Low <i
+                                class="fa-solid fa-bolt option-icon" style="color:#ff5555;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="AC" value="H"><span
+                            class="radio-check"></span><span class="option-label">High <i
+                                class="fa-solid fa-dungeon option-icon" style="color:#50fa7b;"></i></span></label>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-title">Privileges Required (PR)</div>
+                <div class="metric-options">
+                    <label class="radio-option"><input type="radio" name="PR" value="N" checked><span
+                            class="radio-check"></span><span class="option-label">None <i
+                                class="fa-solid fa-ghost option-icon" style="color:#ff5555;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="PR" value="L"><span
+                            class="radio-check"></span><span class="option-label">Low <i
+                                class="fa-solid fa-user-shield option-icon" style="color:#ffb86c;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="PR" value="H"><span
+                            class="radio-check"></span><span class="option-label">High <i
+                                class="fa-solid fa-user-lock option-icon" style="color:#50fa7b;"></i></span></label>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-title">User Interaction (UI)</div>
+                <div class="metric-options">
+                    <label class="radio-option"><input type="radio" name="UI" value="N" checked><span
+                            class="radio-check"></span><span class="option-label">None <i
+                                class="fa-solid fa-robot option-icon" style="color:#ff5555;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="UI" value="R"><span
+                            class="radio-check"></span><span class="option-label">Required <i
+                                class="fa-solid fa-hand-pointer option-icon" style="color:#50fa7b;"></i></span></label>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-title">Scope (S)</div>
+                <div class="metric-options">
+                    <label class="radio-option"><input type="radio" name="S" value="U" checked><span
+                            class="radio-check"></span><span class="option-label">Unchanged <i
+                                class="fa-solid fa-cube option-icon" style="color:#8be9fd;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="S" value="C"><span
+                            class="radio-check"></span><span class="option-label">Changed <i
+                                class="fa-solid fa-arrows-burst option-icon" style="color:#ff79c6;"></i></span></label>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-title">Confidentiality (C)</div>
+                <div class="metric-options">
+                    <label class="radio-option"><input type="radio" name="C" value="N" checked><span
+                            class="radio-check"></span><span class="option-label">None <i
+                                class="fa-solid fa-lock option-icon" style="color:#50fa7b;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="C" value="L"><span
+                            class="radio-check"></span><span class="option-label">Low <i
+                                class="fa-solid fa-key option-icon" style="color:#f1fa8c;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="C" value="H"><span
+                            class="radio-check"></span><span class="option-label">High <i
+                                class="fa-solid fa-folder-open option-icon" style="color:#ff5555;"></i></span></label>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-title">Integrity (I)</div>
+                <div class="metric-options">
+                    <label class="radio-option"><input type="radio" name="I" value="N" checked><span
+                            class="radio-check"></span><span class="option-label">None <i
+                                class="fa-solid fa-circle-check option-icon" style="color:#50fa7b;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="I" value="L"><span
+                            class="radio-check"></span><span class="option-label">Low <i
+                                class="fa-solid fa-pen-to-square option-icon" style="color:#f1fa8c;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="I" value="H"><span
+                            class="radio-check"></span><span class="option-label">High <i
+                                class="fa-solid fa-bomb option-icon" style="color:#ff5555;"></i></span></label>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-title">Availability (A)</div>
+                <div class="metric-options">
+                    <label class="radio-option"><input type="radio" name="A" value="N" checked><span
+                            class="radio-check"></span><span class="option-label">None <i
+                                class="fa-solid fa-server option-icon" style="color:#50fa7b;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="A" value="L"><span
+                            class="radio-check"></span><span class="option-label">Low <i
+                                class="fa-solid fa-triangle-exclamation option-icon"
+                                style="color:#f1fa8c;"></i></span></label>
+                    <label class="radio-option"><input type="radio" name="A" value="H"><span
+                            class="radio-check"></span><span class="option-label">High <i
+                                class="fa-solid fa-fire option-icon" style="color:#ff5555;"></i></span></label>
+                </div>
+            </div>
+
+            <div id="drop-zone" class="drop-zone" style="grid-column: span 4;">
+                <i class="fa-solid fa-cloud-arrow-up"
+                    style="font-size:2rem; margin-bottom:10px; color:var(--primary-accent);"></i><br>
+                Drag & Drop PoC File / Click to Upload for Heuristic Analysis
+            </div>
+            <input type="file" id="file-input" style="display: none;">
+        </div>
+    </div>
+    <script src="/js/script.js"></script>
+</body>
+
+</html>

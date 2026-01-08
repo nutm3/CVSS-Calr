@@ -1,0 +1,20 @@
+services:
+  web:
+    image: img_cvsscalr_web
+    container_name: CNT_CVSSCALR_WEB
+    build: .
+    ports:
+      - "${APP_PORT:-9112}:9112"
+    environment:
+      - PORT=9112
+      - NODE_ENV=production
+    networks:
+      - NET_WEB_NUTM3PROJECT_CVSSCalr
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+
+networks:
+  NET_WEB_NUTM3PROJECT_CVSSCalr:
+    driver: bridge

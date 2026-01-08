@@ -1,0 +1,20 @@
+{
+    "name": "cvsscalr-web",
+    "version": "1.0.0",
+    "description": "Advanced CVSS 3.1 Base Score Calculator with Heuristic Analysis",
+    "main": "src/server.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js"
+    },
+    "author": "Falatehan Anshor",
+    "license": "ISC",
+    "dependencies": {
+        "ejs": "^3.1.9",
+        "express": "^4.18.2",
+        "multer": "^1.4.5-lts.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.1"
+    }
+}
