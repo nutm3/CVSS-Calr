@@ -57,7 +57,7 @@ Intelligent orchestration script that detects Docker environments, manages depen
 | :--- | :--- |
 | **Docker Container**<br>Isolated, production-ready environment. | ![Docker Launch](imgs/smart-launcer-for-run-webapp-docker.png) |
 | **Local Node.js**<br>Native execution for maximum performance. | ![Local Launch](imgs/smart-launcer-for-run-webapp-local.png) |
-| **Intelligent Selection**<br>Auto-prompt for runtime environment. | ![Smart Launcher](imgs/smart-launcer-tools-preselect-local-or-docker.png) |
+| **Intelligent Selection**<br>Auto-prompt for runtime environment. | ![Smart Launcher](imgs/smart-launcer-tools-preselect web-local-or-docker.png) |
 
 ---
 
